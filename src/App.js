@@ -1,14 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import api from './services/api';
+
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  const [flash, setFlash] = useState({});
+
+  const [totalSalesDaily, setTotalSalesDaily] = useState({});
+
+    useEffect(() => {
+        async function loadSalesFlash() {          
+            const response = await api.get('/marketplace');
+            setFlash(response.data);
+            setTotalSalesDaily(response.data.totalSalesDaily);
+        }
+
+        loadSalesFlash();
+
+    }, []);
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+        Flash de Vendas - Captação - {flash.type}. Total: {totalSalesDaily.orders}
         </p>
         <a
           className="App-link"
